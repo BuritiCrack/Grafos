@@ -1,0 +1,712 @@
+{
+  "conexiones": [
+    {
+      "origen": 1,
+      "destino": 3
+    },
+    {
+      "origen": 1,
+      "destino": 32
+    },
+    {
+      "origen": 1,
+      "destino": 38
+    },
+    {
+      "origen": 1,
+      "destino": 63
+    },
+    {
+      "origen": 1,
+      "destino": 74
+    },
+    {
+      "origen": 1,
+      "destino": 90
+    },
+    {
+      "origen": 1,
+      "destino": 110
+    },
+    {
+      "origen": 2,
+      "destino": 3
+    },
+    {
+      "origen": 2,
+      "destino": 11
+    },
+    {
+      "origen": 2,
+      "destino": 14
+    },
+    {
+      "origen": 2,
+      "destino": 20
+    },
+    {
+      "origen": 2,
+      "destino": 23
+    },
+    {
+      "origen": 2,
+      "destino": 34
+    },
+    {
+      "origen": 2,
+      "destino": 42
+    },
+    {
+      "origen": 2,
+      "destino": 43
+    },
+    {
+      "origen": 3,
+      "destino": 14
+    },
+    {
+      "origen": 3,
+      "destino": 18
+    },
+    {
+      "origen": 3,
+      "destino": 26
+    },
+    {
+      "origen": 3,
+      "destino": 30
+    },
+    {
+      "origen": 3,
+      "destino": 38
+    },
+    {
+      "origen": 3,
+      "destino": 40
+    },
+    {
+      "origen": 3,
+      "destino": 42
+    },
+    {
+      "origen": 3,
+      "destino": 58
+    },
+    {
+      "origen": 3,
+      "destino": 70
+    },
+    {
+      "origen": 3,
+      "destino": 80
+    },
+    {
+      "origen": 3,
+      "destino": 82
+    },
+    {
+      "origen": 4,
+      "destino": 13
+    },
+    {
+      "origen": 4,
+      "destino": 25
+    },
+    {
+      "origen": 4,
+      "destino": 31
+    },
+    {
+      "origen": 4,
+      "destino": 34
+    },
+    {
+      "origen": 4,
+      "destino": 37
+    },
+    {
+      "origen": 4,
+      "destino": 83
+    },
+    {
+      "origen": 6,
+      "destino": 111
+    },
+    {
+      "origen": 6,
+      "destino": 112
+    },
+    {
+      "origen": 6,
+      "destino": 113
+    },
+    {
+      "origen": 9,
+      "destino": 12
+    },
+    {
+      "origen": 9,
+      "destino": 111
+    },
+    {
+      "origen": 9,
+      "destino": 112
+    },
+    {
+      "origen": 11,
+      "destino": 23
+    },
+    {
+      "origen": 11,
+      "destino": 32
+    },
+    {
+      "origen": 11,
+      "destino": 68
+    },
+    {
+      "origen": 11,
+      "destino": 70
+    },
+    {
+      "origen": 11,
+      "destino": 83
+    },
+    {
+      "origen": 11,
+      "destino": 90
+    },
+    {
+      "origen": 11,
+      "destino": 91
+    },
+    {
+      "origen": 11,
+      "destino": 110
+    },
+    {
+      "origen": 12,
+      "destino": 38
+    },
+    {
+      "origen": 12,
+      "destino": 58
+    },
+    {
+      "origen": 12,
+      "destino": 80
+    },
+    {
+      "origen": 13,
+      "destino": 20
+    },
+    {
+      "origen": 13,
+      "destino": 24
+    },
+    {
+      "origen": 13,
+      "destino": 67
+    },
+    {
+      "origen": 14,
+      "destino": 30
+    },
+    {
+      "origen": 14,
+      "destino": 40
+    },
+    {
+      "origen": 14,
+      "destino": 42
+    },
+    {
+      "origen": 14,
+      "destino": 70
+    },
+    {
+      "origen": 14,
+      "destino": 76
+    },
+    {
+      "origen": 15,
+      "destino": 26
+    },
+    {
+      "origen": 15,
+      "destino": 29
+    },
+    {
+      "origen": 15,
+      "destino": 45
+    },
+    {
+      "origen": 15,
+      "destino": 52
+    },
+    {
+      "origen": 15,
+      "destino": 57
+    },
+    {
+      "origen": 15,
+      "destino": 75
+    },
+    {
+      "origen": 16,
+      "destino": 63
+    },
+    {
+      "origen": 16,
+      "destino": 90
+    },
+    {
+      "origen": 16,
+      "destino": 110
+    },
+    {
+      "origen": 17,
+      "destino": 39
+    },
+    {
+      "origen": 17,
+      "destino": 47
+    },
+    {
+      "origen": 17,
+      "destino": 83
+    },
+    {
+      "origen": 19,
+      "destino": 44
+    },
+    {
+      "origen": 19,
+      "destino": 62
+    },
+    {
+      "origen": 19,
+      "destino": 85
+    },
+    {
+      "origen": 20,
+      "destino": 26
+    },
+    {
+      "origen": 20,
+      "destino": 29
+    },
+    {
+      "origen": 20,
+      "destino": 39
+    },
+    {
+      "origen": 20,
+      "destino": 45
+    },
+    {
+      "origen": 20,
+      "destino": 52
+    },
+    {
+      "origen": 20,
+      "destino": 61
+    },
+    {
+      "origen": 20,
+      "destino": 75
+    },
+    {
+      "origen": 20,
+      "destino": 86
+    },
+    {
+      "origen": 21,
+      "destino": 51
+    },
+    {
+      "origen": 21,
+      "destino": 65
+    },
+    {
+      "origen": 24,
+      "destino": 78
+    },
+    {
+      "origen": 25,
+      "destino": 37
+    },
+    {
+      "origen": 25,
+      "destino": 41
+    },
+    {
+      "origen": 25,
+      "destino": 47
+    },
+    {
+      "origen": 25,
+      "destino": 83
+    },
+    {
+      "origen": 25,
+      "destino": 84
+    },
+    {
+      "origen": 26,
+      "destino": 29
+    },
+    {
+      "origen": 26,
+      "destino": 38
+    },
+    {
+      "origen": 26,
+      "destino": 52
+    },
+    {
+      "origen": 26,
+      "destino": 58
+    },
+    {
+      "origen": 26,
+      "destino": 61
+    },
+    {
+      "origen": 26,
+      "destino": 75
+    },
+    {
+      "origen": 26,
+      "destino": 86
+    },
+    {
+      "origen": 28,
+      "destino": 34
+    },
+    {
+      "origen": 28,
+      "destino": 48
+    },
+    {
+      "origen": 28,
+      "destino": 69
+    },
+    {
+      "origen": 28,
+      "destino": 106
+    },
+    {
+      "origen": 29,
+      "destino": 75
+    },
+    {
+      "origen": 29,
+      "destino": 86
+    },
+    {
+      "origen": 30,
+      "destino": 70
+    },
+    {
+      "origen": 32,
+      "destino": 68
+    },
+    {
+      "origen": 32,
+      "destino": 90
+    },
+    {
+      "origen": 33,
+      "destino": 44
+    },
+    {
+      "origen": 33,
+      "destino": 53
+    },
+    {
+      "origen": 33,
+      "destino": 62
+    },
+    {
+      "origen": 33,
+      "destino": 81
+    },
+    {
+      "origen": 33,
+      "destino": 107
+    },
+    {
+      "origen": 34,
+      "destino": 69
+    },
+    {
+      "origen": 34,
+      "destino": 106
+    },
+    {
+      "origen": 35,
+      "destino": 36
+    },
+    {
+      "origen": 35,
+      "destino": 51
+    },
+    {
+      "origen": 35,
+      "destino": 61
+    },
+    {
+      "origen": 36,
+      "destino": 46
+    },
+    {
+      "origen": 36,
+      "destino": 61
+    },
+    {
+      "origen": 36,
+      "destino": 65
+    },
+    {
+      "origen": 37,
+      "destino": 91
+    },
+    {
+      "origen": 38,
+      "destino": 80
+    },
+    {
+      "origen": 38,
+      "destino": 82
+    },
+    {
+      "origen": 39,
+      "destino": 79
+    },
+    {
+      "origen": 40,
+      "destino": 42
+    },
+    {
+      "origen": 40,
+      "destino": 70
+    },
+    {
+      "origen": 40,
+      "destino": 74
+    },
+    {
+      "origen": 41,
+      "destino": 47
+    },
+    {
+      "origen": 41,
+      "destino": 67
+    },
+    {
+      "origen": 41,
+      "destino": 84
+    },
+    {
+      "origen": 42,
+      "destino": 74
+    },
+    {
+      "origen": 43,
+      "destino": 105
+    },
+    {
+      "origen": 44,
+      "destino": 62
+    },
+    {
+      "origen": 45,
+      "destino": 52
+    },
+    {
+      "origen": 45,
+      "destino": 61
+    },
+    {
+      "origen": 45,
+      "destino": 75
+    },
+    {
+      "origen": 45,
+      "destino": 86
+    },
+    {
+      "origen": 45,
+      "destino": 109
+    },
+    {
+      "origen": 46,
+      "destino": 51
+    },
+    {
+      "origen": 47,
+      "destino": 67
+    },
+    {
+      "origen": 47,
+      "destino": 84
+    },
+    {
+      "origen": 48,
+      "destino": 87
+    },
+    {
+      "origen": 51,
+      "destino": 61
+    },
+    {
+      "origen": 52,
+      "destino": 86
+    },
+    {
+      "origen": 53,
+      "destino": 62
+    },
+    {
+      "origen": 53,
+      "destino": 81
+    },
+    {
+      "origen": 56,
+      "destino": 104
+    },
+    {
+      "origen": 58,
+      "destino": 60
+    },
+    {
+      "origen": 58,
+      "destino": 82
+    },
+    {
+      "origen": 58,
+      "destino": 89
+    },
+    {
+      "origen": 59,
+      "destino": 67
+    },
+    {
+      "origen": 59,
+      "destino": 84
+    },
+    {
+      "origen": 61,
+      "destino": 75
+    },
+    {
+      "origen": 61,
+      "destino": 86
+    },
+    {
+      "origen": 62,
+      "destino": 81
+    },
+    {
+      "origen": 62,
+      "destino": 85
+    },
+    {
+      "origen": 63,
+      "destino": 68
+    },
+    {
+      "origen": 63,
+      "destino": 83
+    },
+    {
+      "origen": 63,
+      "destino": 110
+    },
+    {
+      "origen": 64,
+      "destino": 98
+    },
+    {
+      "origen": 67,
+      "destino": 95
+    },
+    {
+      "origen": 68,
+      "destino": 110
+    },
+    {
+      "origen": 69,
+      "destino": 106
+    },
+    {
+      "origen": 70,
+      "destino": 74
+    },
+    {
+      "origen": 71,
+      "destino": 107
+    },
+    {
+      "origen": 72,
+      "destino": 98
+    },
+    {
+      "origen": 74,
+      "destino": 100
+    },
+    {
+      "origen": 75,
+      "destino": 86
+    },
+    {
+      "origen": 80,
+      "destino": 82
+    },
+    {
+      "origen": 80,
+      "destino": 89
+    },
+    {
+      "origen": 82,
+      "destino": 104
+    },
+    {
+      "origen": 83,
+      "destino": 91
+    },
+    {
+      "origen": 84,
+      "destino": 110
+    },
+    {
+      "origen": 86,
+      "destino": 109
+    },
+    {
+      "origen": 88,
+      "destino": 98
+    },
+    {
+      "origen": 90,
+      "destino": 110
+    },
+    {
+      "origen": 106,
+      "destino": 108
+    },
+    {
+      "origen": 111,
+      "destino": 112
+    },
+    {
+      "origen": 111,
+      "destino": 113
+    },
+    {
+      "origen": 112,
+      "destino": 113
+    }
+  ]
+}

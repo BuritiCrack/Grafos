@@ -240,7 +240,7 @@ class RedSocialGUI:
     def crear_tab_visualizacion(self):
         """Crear pestaña de opciones de visualización"""
         viz_frame = ttk.Frame(self.notebook, padding="10")
-        self.notebook.add(viz_frame, text="👁️ Visualización")
+        self.notebook.add(viz_frame, text="👁️ Recomendaciones")
         
         # Sección: Red Personal (Ego Network)
         ego_frame = ttk.LabelFrame(viz_frame, text="Red Personal de Usuario", padding="10")
@@ -278,6 +278,37 @@ class RedSocialGUI:
         self.ego_mode = False
         self.ego_user_id = None
         
+        # Sección: Recomendaciones de Conexiones
+        recom_frame = ttk.LabelFrame(viz_frame, text="💡 Recomendaciones de Conexiones", padding="10")
+        recom_frame.pack(fill="both", expand=True, pady=(10, 0))
+        
+        # Instrucciones
+        instrucciones_label = ttk.Label(recom_frame, 
+                                      text="Las recomendaciones aparecerán aquí cuando veas la red personal de un usuario.\n" +
+                                           "Se sugieren conexiones basadas en intereses comunes.",
+                                      font=("Arial", 9, "italic"),
+                                      foreground="gray")
+        instrucciones_label.pack(anchor="w", pady=(0, 10))
+        
+        # Área de recomendaciones con scroll
+        self.recomendaciones_text = scrolledtext.ScrolledText(recom_frame, height=12, width=50, wrap=tk.WORD)
+        self.recomendaciones_text.pack(fill="both", expand=True)
+        
+        # Botón para crear conexión recomendada
+        self.crear_conexion_frame = ttk.Frame(recom_frame)
+        self.crear_conexion_frame.pack(fill="x", pady=(10, 0))
+        
+        ttk.Label(self.crear_conexion_frame, text="Crear conexión con usuario ID:").pack(side="left")
+        self.recom_id_entry = ttk.Entry(self.crear_conexion_frame, width=8)
+        self.recom_id_entry.pack(side="left", padx=(5, 5))
+        
+        self.btn_crear_recom = ttk.Button(self.crear_conexion_frame, text="🔗 Conectar", 
+                                         command=self.crear_conexion_recomendada, state="disabled")
+        self.btn_crear_recom.pack(side="left", padx=(5, 0))
+        
+        # Inicialmente ocultar el frame de crear conexión
+        self.crear_conexion_frame.pack_forget()
+    
     def crear_tab_informacion(self):
         """Crear pestaña de información del grafo"""
         info_frame = ttk.Frame(self.notebook, padding="10")
@@ -349,13 +380,20 @@ class RedSocialGUI:
             item = self.personas_tree.item(selection[0])
             user_id = item['values'][0]
             
-            # Cambiar a la pestaña de visualización
-            self.notebook.select(2)  # Índice de la pestaña de visualización
+            # Cambiar a la pestaña de recomendaciones
+            self.notebook.select(2)  # Índice de la pestaña de recomendaciones
             
             # Configurar y mostrar ego network
             self.ego_user_entry.delete(0, tk.END)
             self.ego_user_entry.insert(0, str(user_id))
-            self.mostrar_ego_network()
+            
+            # Activar modo ego network
+            self.ego_mode = True
+            self.ego_user_id = user_id
+            
+            # Actualizar visualizaciones
+            self.actualizar_ego_grafo()
+            self.mostrar_recomendaciones()
     
     def actualizar_lista_personas(self):
         """Actualizar la lista de personas en el Treeview"""
@@ -486,7 +524,7 @@ class RedSocialGUI:
     def crear_panel_visualizacion(self, parent):
         """Crear panel de visualización del grafo"""
         viz_frame = ttk.LabelFrame(parent, text="Visualización del Grafo", padding="10")
-        self.notebook.add(viz_frame, text="👁️ Visualización")
+        viz_frame.grid(row=0, column=1, sticky=(tk.W, tk.E, tk.N, tk.S))
         
         # Crear figura de matplotlib con mayor resolución y tamaño
         self.fig = Figure(figsize=(14, 10), dpi=120, facecolor='white')
@@ -697,7 +735,7 @@ class RedSocialGUI:
             for node in pos:
                 pos[node] = (pos[node][0] * scale_factor, pos[node][1] * scale_factor)
         
-        # Dibujar nodos con colores variables según número de conexiones
+        # Dibujar nodos with colores variables según número de conexiones
         node_colors = []
         for node in self.grafo.nodes():
             degree = self.grafo.degree(node)
@@ -737,7 +775,7 @@ class RedSocialGUI:
                 name = name[:10] + "..."
             labels[node] = f"{name}\n({node})"
         
-        # Dibujar etiquetas con mejor posicionamiento
+        # Dibujar etiquetas with mejor posicionamiento
         label_pos = {}
         for node, (x, y) in pos.items():
             label_pos[node] = (x, y - 0.05)
@@ -759,44 +797,6 @@ class RedSocialGUI:
         
         self.canvas.draw()
     
-    def mostrar_ego_network(self):
-        """Mostrar la red personal (ego network) de un usuario específico"""
-        user_id_str = self.ego_user_entry.get().strip()
-        
-        if not user_id_str:
-            messagebox.showerror("Error", "Por favor, ingresa un ID de usuario")
-            return
-        
-        try:
-            user_id = int(user_id_str)
-        except ValueError:
-            messagebox.showerror("Error", "El ID debe ser un número válido")
-            return
-        
-        if user_id not in self.grafo.nodes:
-            messagebox.showerror("Error", f"No existe un usuario con ID {user_id}")
-            return
-        
-        # Activar modo ego network
-        self.ego_mode = True
-        self.ego_user_id = user_id
-        
-        # Actualizar la visualización
-        self.actualizar_ego_grafo()
-        # Cambiar automáticamente a la pestaña de información para ver detalles
-        self.notebook.select(3)
-        self.actualizar_informacion()
-    
-    def mostrar_red_completa(self):
-        """Volver a mostrar la red completa"""
-        self.ego_mode = False
-        self.ego_user_id = None
-        self.ego_user_entry.delete(0, tk.END)
-        
-        # Actualizar la visualización
-        self.actualizar_grafo()
-        self.actualizar_informacion()
-    
     def actualizar_ego_grafo(self):
         """Actualizar la visualización del ego graph con mejor separación de nodos"""
         if not self.ego_mode or self.ego_user_id is None:
@@ -816,68 +816,102 @@ class RedSocialGUI:
         
         num_nodes = ego_graph.number_of_nodes()
         
-        pos = nx.spring_layout(ego_graph, k=0.5, iterations=50, seed=42)
+        # Posicionamiento mejorado para ego networks
+        if num_nodes == 2:
+            # Solo 2 nodos: usuario central y una conexión
+            neighbor_id = list(ego_graph.neighbors(self.ego_user_id))[0]
+            pos = {
+                self.ego_user_id: (-0.8, 0),
+                neighbor_id: (0.8, 0)
+            }
+        elif num_nodes <= 8:
+            # Redes pequeñas: layout circular con usuario central en el centro
+            neighbors = list(ego_graph.neighbors(self.ego_user_id))
+            pos = {self.ego_user_id: (0, 0)}
+            
+            # Distribuir vecinos en círculo
+            angle_step = 2 * np.pi / len(neighbors)
+            radius = 1.2;
+            
+            for i, neighbor in enumerate(neighbors):
+                angle = i * angle_step
+                pos[neighbor] = (radius * np.cos(angle), radius * np.sin(angle))
+        else:
+            # Redes más grandes: usar spring layout
+            pos = nx.spring_layout(ego_graph, k=1.5, iterations=100, seed=42)
         
-        # Dibujar nodos with colores variables según número de conexiones
+        # Colores y tamaños especiales para ego network
         node_colors = []
+        node_sizes = []
         for node in ego_graph.nodes():
-            degree = ego_graph.degree(node)
-            if degree > 8:
-                node_colors.append('#ff6b6b')  # Rojo para nodos muy conectados
-            elif degree > 4:
-                node_colors.append('#4ecdc4')  # Verde-azul para nodos bien conectados
-            elif degree > 0:
-                node_colors.append('#45b7d1')  # Azul para nodos con pocas conexiones
+            if node == self.ego_user_id:
+                # Usuario central en rojo destacado
+                node_colors.append('#e74c3c')
+                node_sizes.append(1800)
             else:
-                node_colors.append('#f9ca24')  # Amarillo para nodos aislados
+                # Conexiones en azul
+                node_colors.append('#3498db')
+                node_sizes.append(1200)
         
+        # Dibujar nodos
         nx.draw_networkx_nodes(ego_graph, pos, ax=self.ax, 
                               node_color=node_colors, 
-                              node_size=700, 
-                              alpha=0.8,
+                              node_size=node_sizes, 
+                              alpha=0.9,
                               edgecolors='black',
-                              linewidths=0.5)
+                              linewidths=2)
         
         # Dibujar aristas
         nx.draw_networkx_edges(ego_graph, pos, ax=self.ax,
-                              edge_color='#666666', 
-                              width=2.0, 
-                              alpha=0.6)
+                              edge_color='#2c3e50', 
+                              width=3, 
+                              alpha=0.8)
         
-        # Etiquetas optimizadas para evitar superposición
+        # Crear etiquetas
         labels = {}
         for node, data in ego_graph.nodes(data=True):
-            name = data['label']
-            if len(name) > 12:
-                name = name[:10] + "..."
-            labels[node] = f"{name}\n({node})"
+            name = data.get('label', f'Usuario {node}')
+            if len(name) > 15:
+                name = name[:12] + "..."
+            
+            if node == self.ego_user_id:
+                labels[node] = f"★ {name}\n(ID: {node})"
+            else:
+                labels[node] = f"{name}\n(ID: {node})"
         
-        # Dibujar etiquetas con mejor posicionamiento
+        # Posicionar etiquetas
         label_pos = {}
         for node, (x, y) in pos.items():
-            label_pos[node] = (x, y - 0.05)
+            if node == self.ego_user_id:
+                label_pos[node] = (x, y - 0.2)
+            else:
+                distance_from_center = np.sqrt(x*x + y*y)
+                if distance_from_center > 0:
+                    factor = 1.3
+                    label_pos[node] = (x * factor, y * factor)
+                else:
+                    label_pos[node] = (x, y - 0.2)
         
+        # Dibujar etiquetas
         nx.draw_networkx_labels(ego_graph, label_pos, labels, ax=self.ax,
-                               font_size=10, 
+                               font_size=11,
                                font_weight='bold',
-                               bbox=dict(boxstyle="round,pad=0.2", 
+                               bbox=dict(boxstyle="round,pad=0.4", 
                                        facecolor='white', 
-                                       edgecolor='none',
-                                       alpha=0.8))
+                                       edgecolor='darkgray',
+                                       alpha=0.95,
+                                       linewidth=1))
         
-        # Estadísticas del ego graph
-        num_conexiones_directas = len(list(self.grafo.neighbors(self.ego_user_id)))
-        stats_text = f"Red de: {self.grafo.nodes[self.ego_user_id]['label']} | Conexiones: {num_conexiones_directas}"
+        # Información del usuario central
+        user_data = self.grafo.nodes[self.ego_user_id]
+        user_name = user_data.get('label', f'Usuario {self.ego_user_id}')
+        user_connections = len(list(ego_graph.neighbors(self.ego_user_id)))
         
-        self.ax.set_title(f"Red Personal - {num_nodes} Personas, {ego_graph.number_of_edges()} Conexiones\n"
-                         f"Layout: Spring (Simulación física)", 
+        self.ax.set_title(f"Red Personal de: {user_name} (ID: {self.ego_user_id})\n"
+                         f"{user_connections} Conexiones Directas", 
                          fontsize=14, fontweight='bold', pad=20)
         self.ax.axis('off')
-        self.ax.margins(0.1)
-        
-        # Mostrar estadísticas en la gráfica
-        self.ax.text(0.5, 1.05, stats_text, ha='center', va='center',
-                    transform=self.ax.transAxes, fontsize=12, color='black')
+        self.ax.margins(0.2)
         
         self.canvas.draw()
     
@@ -915,7 +949,7 @@ class RedSocialGUI:
         self.personas_text.delete(1.0, tk.END)
         
         if self.grafo.nodes:
-            # Ordenar por número de conexiones (más conectados primero)
+            # Ordenar por número de conexiones
             personas_ordenadas = sorted(self.grafo.nodes(data=True), 
                                       key=lambda x: len(x[1].get('amigos', [])), 
                                       reverse=True)
@@ -928,13 +962,13 @@ class RedSocialGUI:
                 
                 # Indicador visual según conectividad
                 if amigos_count > 8:
-                    icono = "🔴"  # Muy conectado
+                    icono = "🔴"
                 elif amigos_count > 4:
-                    icono = "🟡"  # Bien conectado
+                    icono = "🟡"
                 elif amigos_count > 0:
-                    icono = "🔵"  # Pocas conexiones
+                    icono = "🔵"
                 else:
-                    icono = "⚪"  # Aislado
+                    icono = "⚪"
                 
                 info = f"{icono} {data['label']} (ID: {node_id})\n"
                 info += f"   Edad: {edad} | Email: {email}\n"
@@ -1002,13 +1036,13 @@ class RedSocialGUI:
                 
                 # Icono según intereses comunes
                 if len(comunes) >= 3:
-                    icono = "🌟"  # Muchos intereses comunes
+                    icono = "🌟"
                 elif len(comunes) >= 2:
-                    icono = "⭐"   # Algunos intereses comunes
+                    icono = "⭐"
                 elif len(comunes) >= 1:
-                    icono = "✨"   # Pocos intereses comunes
+                    icono = "✨"
                 else:
-                    icono = "⚪"   # Sin intereses comunes
+                    icono = "⚪"
                 
                 info += f"{icono} {neighbor_data['label']} (ID: {neighbor_id})\n"
                 info += f"    Edad: {neighbor_data.get('edad', 0)}\n"
@@ -1025,37 +1059,6 @@ class RedSocialGUI:
             info += "     para crear conexiones automáticas.\n"
         
         self.personas_text.insert(tk.END, info)
-    
-    def buscar_usuario_por_nombre(self):
-        """Buscar usuario por nombre y mostrar su red"""
-        nombre_buscar = self.search_entry.get().strip().lower()
-        
-        if not nombre_buscar:
-            messagebox.showerror("Error", "Por favor, ingresa un nombre para buscar")
-            return
-        
-        # Buscar usuarios que coincidan con el nombre
-        usuarios_encontrados = []
-        for node_id, data in self.grafo.nodes(data=True):
-            if nombre_buscar in data['label'].lower():
-                usuarios_encontrados.append((node_id, data['label']))
-        
-        if not usuarios_encontrados:
-            messagebox.showinfo("Sin resultados", f"No se encontraron usuarios con el nombre '{nombre_buscar}'")
-            return
-        
-        if len(usuarios_encontrados) == 1:
-            # Solo un usuario encontrado, mostrar directamente
-            user_id = usuarios_encontrados[0][0]
-            self.ego_user_entry.delete(0, tk.END)
-            self.ego_user_entry.insert(0, str(user_id))
-            self.mostrar_ego_network()
-        else:
-            # Múltiples usuarios encontrados, mostrar opciones
-            opciones = "\n".join([f"ID {uid}: {nombre}" for uid, nombre in usuarios_encontrados])
-            messagebox.showinfo("Múltiples resultados", 
-                               f"Se encontraron varios usuarios:\n\n{opciones}\n\n"
-                               f"Ingresa el ID específico del usuario que deseas ver.")
     
     def guardar_datos(self):
         """Guardar datos en archivos JSON"""
@@ -1109,6 +1112,254 @@ class RedSocialGUI:
         self.edad_entry.delete(0, tk.END)
         self.email_entry.delete(0, tk.END)
         self.intereses_entry.delete(0, tk.END)
+    
+    def buscar_usuario_por_nombre(self):
+        """Buscar usuario por nombre y mostrar su red"""
+        nombre_buscar = self.search_entry.get().strip().lower()
+        
+        if not nombre_buscar:
+            messagebox.showerror("Error", "Por favor, ingresa un nombre para buscar")
+            return
+        
+        # Buscar usuarios que coincidan con el nombre
+        usuarios_encontrados = []
+        for node_id, data in self.grafo.nodes(data=True):
+            if nombre_buscar in data['label'].lower():
+                usuarios_encontrados.append((node_id, data['label']))
+        
+        if not usuarios_encontrados:
+            messagebox.showinfo("Sin resultados", f"No se encontraron usuarios con el nombre '{nombre_buscar}'")
+            return
+        
+        if len(usuarios_encontrados) == 1:
+            # Solo un usuario encontrado, mostrar directamente
+            user_id = usuarios_encontrados[0][0]
+            self.ego_user_entry.delete(0, tk.END)
+            self.ego_user_entry.insert(0, str(user_id))
+            
+            # Activar modo ego network
+            self.ego_mode = True
+            self.ego_user_id = user_id
+            
+            # Actualizar visualizaciones
+            self.actualizar_ego_grafo()
+            self.mostrar_recomendaciones()
+            self.notebook.select(3)  # Ir a pestaña de información
+            self.actualizar_informacion()
+        else:
+            # Múltiples usuarios encontrados, mostrar opciones
+            opciones = "\n".join([f"ID {uid}: {nombre}" for uid, nombre in usuarios_encontrados])
+            messagebox.showinfo("Múltiples resultados", 
+                               f"Se encontraron varios usuarios:\n\n{opciones}\n\n"
+                               f"Ingresa el ID específico del usuario que deseas ver.")
+    
+    def mostrar_red_completa(self):
+        """Volver a mostrar la red completa"""
+        self.ego_mode = False
+        self.ego_user_id = None
+        if hasattr(self, 'ego_user_entry'):
+            self.ego_user_entry.delete(0, tk.END)
+        if hasattr(self, 'search_entry'):
+            self.search_entry.delete(0, tk.END)
+        
+        # Limpiar recomendaciones si existen
+        if hasattr(self, 'recomendaciones_text'):
+            self.recomendaciones_text.delete(1.0, tk.END)
+            self.recomendaciones_text.insert(tk.END, "Selecciona un usuario para ver recomendaciones.")
+        if hasattr(self, 'crear_conexion_frame'):
+            self.crear_conexion_frame.pack_forget()
+        
+        # Actualizar la visualización
+        self.actualizar_grafo()
+        self.actualizar_informacion()
+        
+        messagebox.showinfo("Red Completa", "Ahora se muestra la red social completa")
+
+    def mostrar_ego_network(self):
+        """Mostrar la red personal (ego network) de un usuario específico"""
+        user_id_str = self.ego_user_entry.get().strip()
+        
+        if not user_id_str:
+            messagebox.showerror("Error", "Por favor, ingresa un ID de usuario")
+            return
+        
+        try:
+            user_id = int(user_id_str)
+        except ValueError:
+            messagebox.showerror("Error", "El ID debe ser un número válido")
+            return
+        
+        if user_id not in self.grafo.nodes:
+            messagebox.showerror("Error", f"No existe un usuario con ID {user_id}")
+            return
+        
+        # Activar modo ego network
+        self.ego_mode = True
+        self.ego_user_id = user_id
+        
+        # Actualizar la visualización
+        self.actualizar_ego_grafo()
+        # Mostrar recomendaciones
+        self.mostrar_recomendaciones()
+        # Cambiar automáticamente a la pestaña de información para ver detalles
+        self.notebook.select(3)
+        self.actualizar_informacion()
+    
+    def mostrar_recomendaciones(self):
+        """Mostrar recomendaciones de conexiones basadas en intereses comunes"""
+        if not self.ego_mode or self.ego_user_id is None:
+            self.recomendaciones_text.delete(1.0, tk.END)
+            self.recomendaciones_text.insert(tk.END, "Selecciona un usuario para ver recomendaciones.")
+            self.crear_conexion_frame.pack_forget()
+            return
+        
+        user_data = self.grafo.nodes[self.ego_user_id]
+        user_interests = set(user_data.get('intereses', []))
+        
+        # Obtener usuarios ya conectados
+        connected_users = set(self.grafo.neighbors(self.ego_user_id))
+        connected_users.add(self.ego_user_id)  # Incluir al usuario mismo
+        
+        # Encontrar recomendaciones
+        recomendaciones = []
+        
+        for node_id, data in self.grafo.nodes(data=True):
+            if node_id in connected_users:
+                continue  # Saltar usuarios ya conectados
+            
+            candidate_interests = set(data.get('intereses', []))
+            common_interests = user_interests.intersection(candidate_interests)
+            
+            if common_interests:
+                # Calcular puntuación basada en intereses comunes
+                score = len(common_interests)
+                # Bonus por diversidad de intereses
+                if len(candidate_interests) > 2:
+                    score += 0.5
+                # Bonus por edad similar (±5 años)
+                user_age = user_data.get('edad', 0)
+                candidate_age = data.get('edad', 0)
+                if abs(user_age - candidate_age) <= 5 and user_age > 0 and candidate_age > 0:
+                    score += 0.3
+                
+                recomendaciones.append({
+                    'id': node_id,
+                    'nombre': data.get('label', f'Usuario {node_id}'),
+                    'edad': data.get('edad', 0),
+                    'email': data.get('email', 'No especificado'),
+                    'intereses': candidate_interests,
+                    'intereses_comunes': common_interests,
+                    'score': score
+                })
+        
+        # Ordenar por puntuación (más relevantes primero)
+        recomendaciones.sort(key=lambda x: x['score'], reverse=True)
+        
+        # Mostrar recomendaciones
+        self.recomendaciones_text.delete(1.0, tk.END)
+        
+        if recomendaciones:
+            user_name = user_data.get('label', f'Usuario {self.ego_user_id}')
+            self.recomendaciones_text.insert(tk.END, f"💡 RECOMENDACIONES PARA: {user_name}\n")
+            self.recomendaciones_text.insert(tk.END, "="*50 + "\n\n")
+            
+            for i, recom in enumerate(recomendaciones[:10], 1):  # Mostrar top 10
+                # Icono según puntuación
+                if recom['score'] >= 3:
+                    icono = "🌟"  # Muy recomendado
+                elif recom['score'] >= 2:
+                    icono = "⭐"   # Recomendado
+                else:
+                    icono = "✨"   # Algo recomendado
+                
+                self.recomendaciones_text.insert(tk.END, f"{icono} {i}. {recom['nombre']} (ID: {recom['id']})\n")
+                self.recomendaciones_text.insert(tk.END, f"     Edad: {recom['edad']}\n")
+                self.recomendaciones_text.insert(tk.END, f"     Email: {recom['email']}\n")
+                
+                # Mostrar intereses comunes destacados
+                if recom['intereses_comunes']:
+                    comunes_str = ', '.join(recom['intereses_comunes'])
+                    self.recomendaciones_text.insert(tk.END, f"     💫 Intereses comunes: {comunes_str}\n")
+                
+                # Mostrar todos los intereses del candidato
+                todos_intereses = ', '.join(recom['intereses'])
+                self.recomendaciones_text.insert(tk.END, f"     🏷️ Todos sus intereses: {todos_intereses}\n")
+                
+                # Puntuación de compatibilidad
+                compatibilidad = min(100, int(recom['score'] * 25))
+                self.recomendaciones_text.insert(tk.END, f"     📊 Compatibilidad: {compatibilidad}%\n\n")
+            
+            if len(recomendaciones) > 10:
+                self.recomendaciones_text.insert(tk.END, f"... y {len(recomendaciones) - 10} recomendaciones más.\n")
+            
+            # Mostrar estadísticas
+            self.recomendaciones_text.insert(tk.END, "\n" + "="*50 + "\n")
+            self.recomendaciones_text.insert(tk.END, f"📈 ESTADÍSTICAS:\n")
+            self.recomendaciones_text.insert(tk.END, f"• Total de recomendaciones: {len(recomendaciones)}\n")
+            self.recomendaciones_text.insert(tk.END, f"• Conexiones actuales: {len(connected_users) - 1}\n")
+            self.recomendaciones_text.insert(tk.END, f"• Usuarios sin conectar: {len(self.grafo.nodes) - len(connected_users)}\n")
+            
+            # Mostrar frame para crear conexión
+            self.crear_conexion_frame.pack(fill="x", pady=(10, 0))
+            self.btn_crear_recom.config(state="normal")
+            
+        else:
+            user_name = user_data.get('label', f'Usuario {self.ego_user_id}')
+            self.recomendaciones_text.insert(tk.END, f"🤔 NO HAY RECOMENDACIONES PARA: {user_name}\n")
+            self.recomendaciones_text.insert(tk.END, "="*50 + "\n\n")
+            self.recomendaciones_text.insert(tk.END, "No se encontraron usuarios con intereses similares\n")
+            self.recomendaciones_text.insert(tk.END, "que no estén ya conectados.\n\n")
+            self.recomendaciones_text.insert(tk.END, "💡 Sugerencias:\n")
+            self.recomendaciones_text.insert(tk.END, "• Agrega más personas a la red\n")
+            self.recomendaciones_text.insert(tk.END, "• Diversifica los intereses de los usuarios\n")
+            self.recomendaciones_text.insert(tk.END, "• Revisa si ya tienes muchas conexiones\n")
+            
+            # Ocultar frame para crear conexión
+            self.crear_conexion_frame.pack_forget()
+    
+    def crear_conexion_recomendada(self):
+        """Crear una conexión con un usuario recomendado"""
+        if not self.ego_mode or self.ego_user_id is None:
+            messagebox.showerror("Error", "Primero selecciona un usuario para ver sus recomendaciones")
+            return
+        
+        try:
+            target_id = int(self.recom_id_entry.get().strip())
+        except ValueError:
+            messagebox.showerror("Error", "Por favor, ingresa un ID válido")
+            return
+        
+        if target_id not in self.grafo.nodes:
+            messagebox.showerror("Error", f"No existe un usuario con ID {target_id}")
+            return
+        
+        if target_id == self.ego_user_id:
+            messagebox.showerror("Error", "No puedes conectar un usuario consigo mismo")
+            return
+        
+        if self.grafo.has_edge(self.ego_user_id, target_id):
+            messagebox.showwarning("Advertencia", "Ya estás conectado con este usuario")
+            return
+        
+        # Crear la conexión
+        self.grafo.add_edge(self.ego_user_id, target_id)
+        self.grafo.nodes[self.ego_user_id]['amigos'].append(target_id)
+        self.grafo.nodes[target_id]['amigos'].append(self.ego_user_id)
+        
+        # Obtener nombres para el mensaje
+        user_name = self.grafo.nodes[self.ego_user_id]['label']
+        target_name = self.grafo.nodes[target_id]['label']
+        
+        messagebox.showinfo("Éxito", f"¡Conexión creada exitosamente!\n\n{user_name} ↔ {target_name}")
+        
+        # Limpiar campo y actualizar vistas
+        self.recom_id_entry.delete(0, tk.END)
+        self.actualizar_ego_grafo()
+        self.mostrar_recomendaciones()  # Actualizar recomendaciones
+        self.actualizar_informacion()
+
+
+
 
 if __name__ == "__main__":
     root = tk.Tk()

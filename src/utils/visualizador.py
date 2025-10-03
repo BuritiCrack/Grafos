@@ -284,9 +284,9 @@ class VisualizadorGrafo:
             num_conexiones = len(list(ego_graph.neighbors(ego_node_id)))
             ax.set_title(f"Red Personal de: {user_name} (ID: {ego_node_id})\n"
                         f"{num_conexiones} Conexiones Directas",
-                        fontsize=14, fontweight='bold', pad=10)
+                        fontsize=10, fontweight='bold', pad=-10)
             ax.axis('off')
-            ax.margins(0.2)  # Ajuste de margenes para mejor visualizacion
+            ax.margins(0.5)  # Ajuste de margenes para mejor visualizacion
             
         finally:
             # Restaurar layout anterior

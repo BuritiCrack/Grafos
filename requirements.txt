@@ -1,0 +1,17 @@
+# Red Social - Sistema de Grafos
+# Requisitos del proyecto
+
+# Grafos y análisis de redes
+networkx>=2.8.0
+
+# Visualización
+matplotlib>=3.5.0
+
+# GUI (incluido en Python estándar)
+# tkinter - No necesita instalación en Windows, viene con Python
+
+# Detección de comunidades
+python-louvain>=0.16
+
+# Opcional: para análisis adicional
+numpy>=1.21.0

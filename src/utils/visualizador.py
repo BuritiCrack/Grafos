@@ -225,6 +225,17 @@ class VisualizadorGrafo:
                        fontsize=14, color='gray')
                 return
             
+             # Verificar si el usuario tiene conexiones
+            num_conexiones = len(list(ego_graph.neighbors(ego_node_id)))
+            if num_conexiones == 0:
+                ax.clear()
+                user_name = usuarios_data.get(ego_node_id, {}).get('label', f'Usuario {ego_node_id}')
+                ax.text(0.5, 0.5, f'{user_name} no tiene conexiones\n\nEste usuario no esta conectado con nadie en la red',
+                       ha='center', va='center', transform=ax.transAxes,
+                       fontsize=12, color='#e74c3c',
+                       bbox=dict(boxstyle="round,pad=0.8", facecolor='#ffe6e6', alpha=0.8, edgecolor='#e74c3c'))
+                return
+
             ax.clear()
             pos = self.layout_strategy.calcular_posiciones(ego_graph)
             params = self.layout_strategy.get_parametros_visualizacion(ego_graph.number_of_nodes())
@@ -257,7 +268,7 @@ class VisualizadorGrafo:
                     nombre = nombre[:12] + "..."
                 
                 if node == ego_node_id:
-                    etiquetas[node] = f"? {nombre}\n(ID: {node})"
+                    etiquetas[node] = f"{nombre}\n(ID: {node})"
                 else:
                     etiquetas[node] = f"{nombre}\n(ID: {node})"
             

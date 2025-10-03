@@ -1,8 +1,8 @@
 ﻿# -*- coding: utf-8 -*-
 # gui_controller.py
 """
-Controlador principal que conecta la l�gica de negocio con la interfaz
-Implementa el patr�n MVC (Model-View-Controller)
+Controlador principal que conecta la logica de negocio con la interfaz
+Implementa el patron MVC (Model-View-Controller)
 """
 from typing import Optional, List
 import tkinter as tk
@@ -12,14 +12,14 @@ from models.usuario import Usuario
 from utils.visualizador import VisualizadorGrafo, ShellLayout
 
 class GUIController:
-    """Controlador principal de la aplicaci�n"""
+    """Controlador principal de la aplicacion"""
     
     def __init__(self):
         self.service = RedSocialService()
         self.visualizador = VisualizadorGrafo()
-        self.view = None  # Se asignar� cuando se cree la vista
+        self.view = None  # Se asignara cuando se cree la vista
         
-        # Estado de la aplicaci�n
+        # Estado de la aplicacion
         self.ego_mode = False
         self.ego_user_id = None
     
@@ -31,7 +31,7 @@ class GUIController:
         """Asignar la vista al controlador"""
         self.view = view
     
-    # === GESTI�N DE USUARIOS ===
+    # === GESTION DE USUARIOS ===
     
     def agregar_usuario(self, nombre: str, edad_str: str, email: str, intereses_str: str) -> bool:
         """Agregar un nuevo usuario"""
@@ -53,12 +53,12 @@ class GUIController:
             intereses=intereses
         )
         
-        # Mensaje de �xito
+        # Mensaje de exito
         mensaje = f"Persona '{usuario.nombre}' agregada con ID {usuario.id}"
         if conexiones_creadas > 0:
-            mensaje += f"\n{conexiones_creadas} conexiones autom�ticas creadas"
+            mensaje += f"\n{conexiones_creadas} conexiones automaticas creadas"
         
-        messagebox.showinfo("�xito", mensaje)
+        messagebox.showinfo("Exito", mensaje)
         
         # Notificar a la vista para actualizar
         if self.view:
@@ -85,15 +85,15 @@ class GUIController:
         
         return usuarios_encontrados
     
-    # === GESTI�N DE CONEXIONES ===
+    # === GESTION DE CONEXIONES ===
     
     def crear_conexion_manual(self, id1_str: str, id2_str: str) -> bool:
-        """Crear conexi�n manual entre dos usuarios"""
+        """Crear conexion manual entre dos usuarios"""
         try:
             id1 = int(id1_str)
             id2 = int(id2_str)
         except ValueError:
-            messagebox.showerror("Error", "Los IDs deben ser n�meros v�lidos")
+            messagebox.showerror("Error", "Los IDs deben ser numeros validos")
             return False
         
         # Validaciones
@@ -109,12 +109,12 @@ class GUIController:
             return False
         
         if id2 in usuario1.amigos:
-            messagebox.showwarning("Advertencia", "Estas personas ya est�n conectadas")
+            messagebox.showwarning("Advertencia", "Estas personas yaestan conectadas")
             return False
         
-        # Crear conexi�n
+        # Crear conexion
         if self.service.crear_conexion(id1, id2):
-            messagebox.showinfo("�xito", f"Conexi�n creada entre {usuario1.nombre} y {usuario2.nombre}")
+            messagebox.showinfo("Exito", f"Conexion creada entre {usuario1.nombre} y {usuario2.nombre}")
             
             # Actualizar vista
             if self.view:
@@ -138,7 +138,7 @@ class GUIController:
         try:
             usuario_id = int(usuario_id_str)
         except ValueError:
-            messagebox.showerror("Error", "El ID debe ser un n�mero v�lido")
+            messagebox.showerror("Error", "El ID debe ser un numero valido")
             return False
         
         if not self.service.obtener_usuario(usuario_id):
@@ -165,9 +165,9 @@ class GUIController:
             return self.mostrar_ego_network(str(usuarios[0].id))
         elif len(usuarios) > 1:
             opciones = "\n".join([f"ID {u.id}: {u.nombre}" for u in usuarios])
-            messagebox.showinfo("M�ltiples resultados", 
+            messagebox.showinfo("Multiples resultados", 
                                f"Se encontraron varios usuarios:\n\n{opciones}\n\n"
-                               f"Ingresa el ID espec�fico del usuario que deseas ver.")
+                               f"Ingresa el ID especifico del usuario que deseas ver.")
         
         return False
     
@@ -176,11 +176,11 @@ class GUIController:
         return self.service.obtener_recomendaciones(usuario_id)
     
     def crear_conexion_recomendada(self, usuario_origen_id: int, usuario_destino_str: str) -> bool:
-        """Crear conexi�n con usuario recomendado"""
+        """Crear conexion con usuario recomendado"""
         try:
             usuario_destino_id = int(usuario_destino_str.strip())
         except ValueError:
-            messagebox.showerror("Error", "Por favor, ingresa un ID v�lido")
+            messagebox.showerror("Error", "Por favor, ingresa un ID valido")
             return False
         
         return self.crear_conexion_manual(str(usuario_origen_id), str(usuario_destino_id))
@@ -193,17 +193,15 @@ class GUIController:
         if self.view:
             self.view.limpiar_campos_ego()
             self.view.actualizar_visualizacion()
-        
-        messagebox.showinfo("Red Completa", "Ahora se muestra la red social completa")
     
-    # === AN�LISIS ===
+    # === ANALISIS ===
     
     def obtener_estadisticas(self):
-        """Obtener estad�sticas de la red"""
+        """Obtener estadisticas de la red"""
         return self.service.obtener_estadisticas()
     
     def calcular_centralidad(self):
-        """Calcular m�tricas de centralidad"""
+        """Calcular metricas de centralidad"""
         if not self.service.obtener_todos_usuarios():
             messagebox.showwarning("Advertencia", "No hay datos para analizar")
             return None
@@ -226,10 +224,10 @@ class GUIController:
             usuarios = self.service.obtener_todos_usuarios()
             conexiones = self.service.obtener_conexiones()
             
-            messagebox.showinfo("�xito", 
+            messagebox.showinfo("Exito", 
                                f"Datos guardados exitosamente:\n"
-                               f"� {len(usuarios)} usuarios\n"
-                               f"� {len(conexiones)} conexiones")
+                               f"- {len(usuarios)} usuarios\n"
+                               f"- {len(conexiones)} conexiones")
             return True
         else:
             messagebox.showerror("Error", "Error al guardar los datos")
@@ -249,10 +247,10 @@ class GUIController:
         if self.view:
             self.view.actualizar_tras_recarga()
         
-        messagebox.showinfo("�xito", "Datos recargados correctamente")
+        messagebox.showinfo("Exito", "Datos recargados correctamente")
         return True
     
-    # === VISUALIZACI�N ===
+    # === VISUALIZACION ===
     
     def renderizar_grafo(self, ax, usuarios_data=None):
         """Renderizar el grafo en el axis dado"""

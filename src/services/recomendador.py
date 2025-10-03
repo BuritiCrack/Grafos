@@ -8,15 +8,15 @@ from abc import ABC, abstractmethod
 from models.usuario import Usuario
 
 class EstrategiaRecomendacion(ABC):
-    """Interfaz para estrategias de recomendaci�n"""
+    """Interfaz para estrategias de recomendacion"""
     
     @abstractmethod
     def calcular_score(self, usuario_origen: Usuario, usuario_candidato: Usuario) -> float:
-        """Calcular puntuaci�n de compatibilidad entre usuarios"""
+        """Calcular puntuacion de compatibilidad entre usuarios"""
         pass
 
 class RecomendacionPorIntereses(EstrategiaRecomendacion):
-    """Estrategia de recomendaci�n basada en intereses comunes"""
+    """Estrategia de recomendacion basada en intereses comunes"""
     
     def calcular_score(self, usuario_origen: Usuario, usuario_candidato: Usuario) -> float:
         """Calcular score basado en intereses comunes y otros factores"""
@@ -28,7 +28,7 @@ class RecomendacionPorIntereses(EstrategiaRecomendacion):
         if len(usuario_candidato.intereses) > 2:
             score += 0.5
         
-        # Bonus por edad similar (�5 a�os)
+        # Bonus por edad similar (+/- 5 anos)
         if (usuario_origen.edad > 0 and usuario_candidato.edad > 0 and
             abs(usuario_origen.edad - usuario_candidato.edad) <= 5):
             score += 0.3
@@ -42,7 +42,7 @@ class RecomendadorConexiones:
         self.estrategia = estrategia or RecomendacionPorIntereses()
     
     def cambiar_estrategia(self, estrategia: EstrategiaRecomendacion):
-        """Cambiar estrategia de recomendaci�n"""
+        """Cambiar estrategia de recomendacion"""
         self.estrategia = estrategia
     
     def generar_recomendaciones(self, usuario_origen: Usuario, 
@@ -79,7 +79,7 @@ class RecomendadorConexiones:
     
     def obtener_estadisticas_recomendaciones(self, usuario_origen: Usuario,
                                            candidatos: List[Usuario]) -> Dict:
-        """Obtener estad�sticas sobre las recomendaciones disponibles"""
+        """Obtener estadisticas sobre las recomendaciones disponibles"""
         total_candidatos = len(candidatos)
         candidatos_con_intereses = sum(
             1 for c in candidatos 

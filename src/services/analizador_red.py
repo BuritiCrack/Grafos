@@ -1,17 +1,17 @@
 ﻿# -*- coding: utf-8 -*-
 # analizador_red.py
 """
-Analizador de m�tricas y propiedades de la red social
+Analizador de metricas y propiedades de la red social
 """
 import networkx as nx
 from typing import Dict, List
 from models.usuario import Usuario
 
 class AnalizadorRed:
-    """Analiza m�tricas y propiedades de la red social"""
+    """Analiza metricas y propiedades de la red social"""
     
     def calcular_estadisticas_generales(self, grafo: nx.Graph) -> Dict:
-        """Calcular estad�sticas generales de la red"""
+        """Calcular estadisticas generales de la red"""
         num_nodos = grafo.number_of_nodes()
         num_aristas = grafo.number_of_edges()
         
@@ -40,7 +40,7 @@ class AnalizadorRed:
         }
     
     def calcular_centralidad(self, grafo: nx.Graph, usuarios: Dict[int, Usuario]) -> Dict:
-        """Calcular m�tricas de centralidad"""
+        """Calcular metricas de centralidad"""
         if not grafo.nodes:
             return {'grado': [], 'cercania': []}
         
@@ -58,7 +58,7 @@ class AnalizadorRed:
             for node_id, centralidad in top_grado
         ]
         
-        # Centralidad de cercan�a (solo si el grafo est� conectado)
+        # Centralidad de cercania (solo si el grafo esta conectado)
         cercania_resultado = []
         if nx.is_connected(grafo):
             centralidad_cercania = nx.closeness_centrality(grafo)
@@ -109,7 +109,7 @@ class AnalizadorRed:
     
     def analizar_usuario(self, grafo: nx.Graph, usuario_id: int, 
                         usuarios: Dict[int, Usuario]) -> Dict:
-        """An�lisis detallado de un usuario espec�fico"""
+        """Analisis detallado de un usuario especifico"""
         if usuario_id not in grafo.nodes:
             return {}
         
@@ -117,7 +117,7 @@ class AnalizadorRed:
         grado = grafo.degree(usuario_id)
         vecinos = list(grafo.neighbors(usuario_id))
         
-        # An�lisis de conexiones por intereses
+        # Analisis de conexiones por intereses
         conexiones_por_interes = {}
         for vecino_id in vecinos:
             vecino = usuarios[vecino_id]

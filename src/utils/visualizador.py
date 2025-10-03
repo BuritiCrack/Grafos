@@ -1,7 +1,7 @@
 ﻿# -*- coding: utf-8 -*-
 # visualizador.py
 """
-Componente para manejo de visualizaci�n de grafos
+Componente para manejo de visualizacion de grafos
 Implementa Strategy Pattern para diferentes tipos de layouts
 """
 import networkx as nx
@@ -21,7 +21,7 @@ class LayoutStrategy(ABC):
     
     @abstractmethod
     def get_parametros_visualizacion(self, num_nodos: int) -> Dict[str, Any]:
-        """Obtener par�metros de visualizaci�n seg�n el tama�o"""
+        """Obtener parametros de visualizacion segun el tamano"""
         pass
 
 class ShellLayout(LayoutStrategy):
@@ -36,7 +36,7 @@ class ShellLayout(LayoutStrategy):
                 nodes_by_degree[degree] = []
             nodes_by_degree[degree].append(node)
         
-        # Crear shells ordenados por grado (m�s conectados en el centro)
+        # Crear shells ordenados por grado (mas conectados en el centro)
         shells = [nodes_by_degree[degree] 
                  for degree in sorted(nodes_by_degree.keys(), reverse=True)]
         
@@ -104,7 +104,7 @@ class EgoNetworkLayout(LayoutStrategy):
             
             return pos
         else:
-            # Spring layout para redes m�s grandes
+            # Spring layout para redes mas grandes
             return nx.spring_layout(grafo, k=1.5, iterations=100, seed=42)
     
     def get_parametros_visualizacion(self, num_nodos: int) -> Dict[str, Any]:
@@ -116,7 +116,7 @@ class EgoNetworkLayout(LayoutStrategy):
         }
 
 class VisualizadorGrafo:
-    """Componente principal para visualizaci�n de grafos"""
+    """Componente principal para visualizacion de grafos"""
     
     def __init__(self):
         self.layout_strategy = ShellLayout()
@@ -126,7 +126,7 @@ class VisualizadorGrafo:
         self.layout_strategy = strategy
     
     def generar_colores_nodos(self, grafo: nx.Graph) -> list:
-        """Generar colores para nodos seg�n grado de conectividad"""
+        """Generar colores para nodos segun grado de conectividad"""
         colores = []
         for node in grafo.nodes():
             degree = grafo.degree(node)
@@ -174,7 +174,7 @@ class VisualizadorGrafo:
                    bbox=dict(boxstyle="round,pad=0.5", facecolor='lightgray', alpha=0.3))
             return
         
-        # Calcular posiciones y par�metros
+        # Calcular posiciones y parametros
         pos = self.layout_strategy.calcular_posiciones(grafo)
         params = self.layout_strategy.get_parametros_visualizacion(grafo.number_of_nodes())
         
@@ -240,7 +240,7 @@ class VisualizadorGrafo:
             pos = self.layout_strategy.calcular_posiciones(ego_graph)
             params = self.layout_strategy.get_parametros_visualizacion(ego_graph.number_of_nodes())
             
-            # Colores y tama�os especiales para ego network
+            # Colores y tamanos especiales para ego network
             colores = []
             tamanos = []
             for node in ego_graph.nodes():

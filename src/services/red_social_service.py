@@ -1,8 +1,8 @@
 ﻿# -*- coding: utf-8 -*-
 # red_social_service.py
 """
-Servicio principal para manejar la l�gica de negocio de la red social
-Implementa el patr�n Service Layer
+Servicio principal para manejar la logica de negocio de la red social
+Implementa el patron Service Layer
 """
 import networkx as nx
 from typing import List, Dict, Tuple, Optional, Set
@@ -12,7 +12,7 @@ from services.recomendador import RecomendadorConexiones
 from services.analizador_red import AnalizadorRed
 
 class RedSocialService:
-    """Servicio principal que maneja toda la l�gica de negocio"""
+    """Servicio principal que maneja toda la logica de negocio"""
     
     def __init__(self):
         self.grafo = nx.Graph()
@@ -70,20 +70,20 @@ class RedSocialService:
         self.grafo.add_node(usuario.id, **usuario.to_dict())
         self._siguiente_id += 1
         
-        # Crear conexiones autom�ticas
+        # Crear conexiones automaticas
         conexiones_creadas = self._crear_conexiones_automaticas(usuario.id)
         
         return usuario, conexiones_creadas
     
     def crear_conexion(self, usuario1_id: int, usuario2_id: int) -> bool:
-        """Crear conexi�n entre dos usuarios"""
+        """Crear conexion entre dos usuarios"""
         if (usuario1_id not in self.usuarios or 
             usuario2_id not in self.usuarios or
             usuario1_id == usuario2_id or
             self.grafo.has_edge(usuario1_id, usuario2_id)):
             return False
         
-        # Crear conexi�n en el grafo
+        # Crear conexion en el grafo
         self.grafo.add_edge(usuario1_id, usuario2_id)
         
         # Actualizar listas de amigos
@@ -101,7 +101,7 @@ class RedSocialService:
         return self.usuarios.get(usuario_id)
     
     def buscar_usuarios_por_nombre(self, nombre: str) -> List[Usuario]:
-        """Buscar usuarios por nombre (b�squeda parcial)"""
+        """Buscar usuarios por nombre (busqueda parcial)"""
         nombre_lower = nombre.lower()
         return [
             usuario for usuario in self.usuarios.values()
@@ -142,11 +142,11 @@ class RedSocialService:
         return self.recomendador.generar_recomendaciones(usuario, candidatos)
     
     def obtener_estadisticas(self) -> Dict:
-        """Obtener estad�sticas generales de la red"""
+        """Obtener estadisticas generales de la red"""
         return self.analizador.calcular_estadisticas_generales(self.grafo)
     
     def calcular_centralidad(self) -> Dict:
-        """Calcular m�tricas de centralidad"""
+        """Calcular metricas de centralidad"""
         return self.analizador.calcular_centralidad(self.grafo, self.usuarios)
     
     def detectar_comunidades(self) -> List[List[Usuario]]:
@@ -154,7 +154,7 @@ class RedSocialService:
         return self.analizador.detectar_comunidades(self.grafo, self.usuarios)
     
     def _crear_conexiones_automaticas(self, usuario_id: int) -> int:
-        """Crear conexiones autom�ticas basadas en intereses comunes"""
+        """Crear conexiones automaticas basadas en intereses comunes"""
         usuario = self.usuarios[usuario_id]
         conexiones_creadas = 0
         

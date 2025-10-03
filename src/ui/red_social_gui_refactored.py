@@ -648,8 +648,8 @@ class RedSocialGUIRefactored:
             self.crear_recom_frame.pack_forget()
     
     def cambiar_a_pestana_informacion(self):
-        """Cambiar a la pestana de informacion"""
-        self.notebook.select(3)
+        """Cambiar a la pestana de recomendaciones"""
+        self.notebook.select(2)  # Indice 2 = Pestana de Recomendaciones
 
 if __name__ == "__main__":
     root = tk.Tk()

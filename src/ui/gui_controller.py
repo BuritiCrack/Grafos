@@ -268,8 +268,12 @@ class GUIController:
             )
     
     def esta_en_modo_ego(self) -> bool:
-        """Verificar si est� en modo ego network"""
+        """Verificar si esta en modo ego network"""
         return self.ego_mode and self.ego_user_id is not None
+    
+    def obtener_usuario(self, usuario_id: int) -> Optional[Usuario]:
+        """Obtener un usuario por ID"""
+        return self.service.obtener_usuario(usuario_id)
     
     def obtener_usuario_ego(self) -> Optional[Usuario]:
         """Obtener usuario del ego network actual"""

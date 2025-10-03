@@ -201,7 +201,7 @@ class VisualizadorGrafo:
         # Configurar axis
         ax.set_title(f"{titulo} - {grafo.number_of_nodes()} Personas, "
                     f"{grafo.number_of_edges()} Conexiones",
-                    fontsize=14, fontweight='bold', pad=20)
+                    fontsize=14, fontweight='bold', pad=10)
         ax.axis('off')
         ax.margins(0.1)
     
@@ -279,14 +279,14 @@ class VisualizadorGrafo:
                                    bbox=dict(boxstyle="round,pad=0.4", facecolor='white',
                                            edgecolor='darkgray', alpha=0.95, linewidth=1))
             
-            # T�tulo
+            # Titulo
             user_name = usuarios_data.get(ego_node_id, {}).get('label', f'Usuario {ego_node_id}')
             num_conexiones = len(list(ego_graph.neighbors(ego_node_id)))
             ax.set_title(f"Red Personal de: {user_name} (ID: {ego_node_id})\n"
                         f"{num_conexiones} Conexiones Directas",
-                        fontsize=14, fontweight='bold', pad=20)
+                        fontsize=14, fontweight='bold', pad=10)
             ax.axis('off')
-            ax.margins(0.2)
+            ax.margins(0.2)  # Ajuste de margenes para mejor visualizacion
             
         finally:
             # Restaurar layout anterior
